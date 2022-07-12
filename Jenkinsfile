@@ -1,23 +1,22 @@
 pipeline {
     agent any
     environment {
-		DOCKERHUB_CREDENTIALS=credentials('dockerhub')
+		DOCKERHUB_CREDENTIALS=credentials('anjalyb')
 		registry = "anjalyb/kubernatesproject"
 		dockerImage = ''
 	}
     stages {
-        stage('gitclone') {
-
-			steps {
-				checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'git-jenk', url: 'https://github.com/AnjalyBa/kubernate.git']]])
+        stage('source'){
+            steps{
+               git branch: 'main', credentialsId: '4f2ab0c5-5203-419d-a587-366b02bcac48', url: 'https://github.com/AnjalyBa/kube.git' 
                 
             }
         }
     stage('build and tag'){
         steps{
             script {
-            sh ' docker build -t kubernate/dockerfile:latest .'
-            sh 'docker tag kubernate/dockerfile:latest anjalyb/kubernatesproject:$BUILD_NUMBER'
+            sh ' docker build -t kube:latest .'
+            sh 'docker tag kube:latest anjalyb/kubernatesproject:$BUILD_NUMBER'
             }
             
         }
